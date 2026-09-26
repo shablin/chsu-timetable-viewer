@@ -27,7 +27,7 @@ jobs:
             id: version
             shell: bash
             run: |
-                VERSION=$(jq -r '.version' extension/manifest.json)
+                VERSION=$(jq -r '.version' manifest.json)
 
                 if [ -z "$VERSION" ] || [ "$VERSION" = "null" ]; then
                     echo "version not found in manifest.json"

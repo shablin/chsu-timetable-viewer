@@ -4,6 +4,7 @@ const WHITELIST = [
 
 function blockLinks() {
     const links = document.querySelectorAll('a');
+    console.info(`found ${links.length} links total`)
 
     links.forEach(link => {
         const href = link.href.toLowerCase();
@@ -13,6 +14,7 @@ function blockLinks() {
 
         if (!isInWhitelist) {
             link.style.pointerEvents = 'none';
+            console.info("pointerEvents prevented for:", link.href)
         }
     });
 }

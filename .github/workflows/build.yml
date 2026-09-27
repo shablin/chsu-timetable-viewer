@@ -7,6 +7,9 @@ on:
 
     workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
     build:
         runs-on: ubuntu-latest
@@ -52,4 +55,8 @@ jobs:
             with:
                 name: unlinker-${{ steps.version.outputs.version }}
                 path: "unlinker-${{ steps.version.outputs.version }}.crx"
-                generate_release_notes: true
+          - name: Create Release
+            uses: softprops/action-gh-release@v3
+            with:
+              files: "unlinker-${{ steps.version.outputs.version }}.crx"
+              generate_release_notes: true

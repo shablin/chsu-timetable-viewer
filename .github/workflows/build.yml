@@ -43,7 +43,7 @@ jobs:
 
           - name: Build CRX
             run: |
-                crx pack extension \
+                crx pack . \
                     -p unlinker.pem \
                     -o "unlinker-${{ steps.version.outputs.version }}.crx"
 

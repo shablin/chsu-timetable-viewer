@@ -1,9 +1,5 @@
-const DISALLOWED = [
-    "dzen.ru",
-    "vk.ru",
-    "vk.com",
-    "rutube.ru",
-    "max.ru"
+const WHITELIST = [
+    "chsu.ru"
 ]
 
 function blockLinks() {
@@ -13,9 +9,9 @@ function blockLinks() {
         const href = link.href.toLowerCase();
         const text = link.href.toLowerCase();
 
-        const isDisallowed = DISALLOWED.some(item => href.includes(item) || text.includes(item));
+        const isInWhitelist = WHITELIST.some(item => href.includes(item) || text.includes(item));
 
-        if (isDisallowed) {
+        if (!isInWhitelist) {
             link.style.pointerEvents = 'none';
         }
     });

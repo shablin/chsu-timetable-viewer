@@ -42,10 +42,8 @@ function getElementsBySelector(selectors) {
 function clearPage(elements) {
 	elements.forEach(el => {
 		el.remove()
-		console.log('removed', el)
+		console.log('[chsu-timetable-viewer]: el removed:', el)
 	})
-	
-	console.log('clean mode is working...')
 }
 
 

@@ -1,7 +1,7 @@
 {
-  "name": "Unlinker (by @shablin)",
-  "description": "Blocks specific links on the web page",
-  "version": "0.2",
+  "name": "Средство отображения расписания ЧГУ",
+  "description": "Средство отображения расписания Череповецкого государственного универсистета для терминала",
+  "version": "1.0",
   "manifest_version": 3,
   "permissions": [],
   "content_scripts": [

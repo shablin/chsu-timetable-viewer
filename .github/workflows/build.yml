@@ -1,4 +1,4 @@
-name: Build CRX
+name: Build Extension (CRX)
 
 on:
     push:
@@ -42,21 +42,21 @@ jobs:
 
           - name: Restore private key
             run: |
-                echo "${{ secrets.CRX_PRIVATE_KEY }}" > unlinker.pem
+                echo "${{ secrets.CRX_PRIVATE_KEY }}" > chsu-timetable-viewer.pem
 
           - name: Build CRX
             run: |
                 crx pack . \
-                    -p unlinker.pem \
-                    -o "unlinker-${{ steps.version.outputs.version }}.crx"
+                    -p chsu-timetable-viewer.pem \
+                    -o "chsu-timetable-viewer-${{ steps.version.outputs.version }}.crx"
 
           - name: Upload CRX
             uses: actions/upload-artifact@v4
             with:
-                name: unlinker-${{ steps.version.outputs.version }}
-                path: "unlinker-${{ steps.version.outputs.version }}.crx"
+                name: chsu-timetable-viewer-${{ steps.version.outputs.version }}
+                path: "chsu-timetable-viewer-${{ steps.version.outputs.version }}.crx"
           - name: Create Release
             uses: softprops/action-gh-release@v3
             with:
-              files: "unlinker-${{ steps.version.outputs.version }}.crx"
+              files: "chsu-timetable-viewer-${{ steps.version.outputs.version }}.crx"
               generate_release_notes: true

@@ -1,25 +1,72 @@
 const WHITELIST = [
-    "chsu.ru"
+    "www.chsu.ru"
 ]
 
-function blockLinks() {
-    const links = document.querySelectorAll('a');
-    console.info(`found ${links.length} links total`)
+const GARBAGE_SELECTORS = [
+	"header.pc",
+	"#bx_breadcrumb_0",
+	".footer__top_content",
+	".footer_contacts:nth-child(2)",
+	".right_col",
+	".separator"
+]
 
-    links.forEach(link => {
-        const href = link.href.toLowerCase();
-        const text = link.href.toLowerCase();
+const IS_WHITELIST_MODE = true
+const IS_CLEANER_MODE = true
+const IS_GLOB_USERSELECT_BLOCK = true
+const IS_CONTEXTMENU_BLOCK = true
 
-        const isInWhitelist = WHITELIST.some(item => href.includes(item) || text.includes(item));
 
-        if (!isInWhitelist) {
-            link.style.pointerEvents = 'none';
-            console.info("pointerEvents prevented for:", link.href)
-        }
-    });
+function getLinksFromPage() {
+	const links = document.querySelectorAll('a')
+	console.log('[chsu-timetable-viewer]: found', links.length, 'links total')
+	return links
 }
 
-blockLinks();
+function blockLink(links, whitelist) {
+	links.forEach(link => {
+		const url = new URL(link.href)
+		const isAllowedLink = whitelist.includes(url.hostname)
+		
+		if (!isAllowedLink) {
+			link.style.pointerEvents = 'none'
+			console.log('[chsu-timetable-viewer]:', 'pointerEvents prevented for:', link.href)
+		}
+	})
+}
 
-const observer = new MutationObserver(() => blockLinks());
-observer.observe(document.body, { childList: true, subtree: true })
+function getElementsBySelector(selectors) {
+	return selectors
+		.map(s => document.querySelector(s))
+		.filter(el => el !== null)
+}
+
+function clearPage(elements) {
+	elements.forEach(el => el.remove())
+}
+
+function blockUserSelectGlob() {
+	document.body.style.userSelect = "none"
+}
+
+function blockContextMenu() {
+	document.addEventListener('contextmenu', (e) => {
+		e.preventDefault()
+		e.stopPropagation()
+	}, true)
+}
+
+function blockTargetLink(selector) {
+	document.querySelector(selector).style.pointerEvents = "none"
+}
+
+
+if (IS_WHITELIST_MODE) {
+	const observer = new MutationObserver(() => blockLink(getLinksFromPage(), WHITELIST));
+	observer.observe(document.body, { childList: true, subtree: true })
+	blockTargetLink("div.col.left_col > a")
+}
+
+if (IS_CLEANER_MODE) clearPage(getElementsBySelector(GARBAGE_SELECTORS))
+if (IS_GLOB_USERSELECT_BLOCK) blockUserSelectGlob()
+if (IS_CONTEXTMENU_BLOCK) blockContextMenu()

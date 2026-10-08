@@ -1,5 +1,5 @@
 const WHITELIST = [
-    "chsu.ru"
+    "www.chsu.ru"
 ]
 
 const GARBAGE_SELECTORS = [
@@ -25,8 +25,8 @@ function getLinksFromPage() {
 
 function blockLink(links, whitelist) {
 	links.forEach(link => {
-		const href = link.href.toLowerCase()
-		const isAllowedLink = whitelist.some(i => href.includes(i))
+		const url = new URL(link.href)
+		const isAllowedLink = whitelist.includes(url.hostname)
 		
 		if (!isAllowedLink) {
 			link.style.pointerEvents = 'none'
@@ -42,10 +42,7 @@ function getElementsBySelector(selectors) {
 }
 
 function clearPage(elements) {
-	elements.forEach(el => {
-		el.remove()
-		console.log('[chsu-timetable-viewer]: el removed:', el)
-	})
+	elements.forEach(el => el.remove())
 }
 
 function blockUserSelectGlob() {
@@ -59,12 +56,17 @@ function blockContextMenu() {
 	}, true)
 }
 
+function blockTargetLink(selector) {
+	document.querySelector(selector).style.pointerEvents = "none"
+}
 
-if (IS_WHITELIST_MODE) blockLink(getLinksFromPage(), WHITELIST)
+
+if (IS_WHITELIST_MODE) {
+	const observer = new MutationObserver(() => blockLink(getLinksFromPage(), WHITELIST));
+	observer.observe(document.body, { childList: true, subtree: true })
+	blockTargetLink("div.col.left_col > a")
+}
+
 if (IS_CLEANER_MODE) clearPage(getElementsBySelector(GARBAGE_SELECTORS))
 if (IS_GLOB_USERSELECT_BLOCK) blockUserSelectGlob()
 if (IS_CONTEXTMENU_BLOCK) blockContextMenu()
-
-
-const observer = new MutationObserver(() => blockLink());
-observer.observe(document.body, { childList: true, subtree: true })

@@ -13,7 +13,7 @@ const GARBAGE_SELECTORS = [
 
 const IS_WHITELIST_MODE = true
 const IS_CLEANER_MODE = true
-
+const IS_GLOB_USERSELECT_BLOCK = true
 
 function getLinksFromPage() {
 	const links = document.querySelectorAll('a')
@@ -46,9 +46,15 @@ function clearPage(elements) {
 	})
 }
 
+function blockUserSelectGlob() {
+	document.body.style.userSelect = "none"
+}
+
 
 if (IS_WHITELIST_MODE) blockLink(getLinksFromPage(), WHITELIST)
 if (IS_CLEANER_MODE) clearPage(getElementsBySelector(GARBAGE_SELECTORS))
+if (IS_GLOB_USERSELECT_BLOCK) blockUserSelectGlob()
+
 
 const observer = new MutationObserver(() => blockLink());
 observer.observe(document.body, { childList: true, subtree: true })

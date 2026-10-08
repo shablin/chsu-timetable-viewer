@@ -14,6 +14,8 @@ const GARBAGE_SELECTORS = [
 const IS_WHITELIST_MODE = true
 const IS_CLEANER_MODE = true
 const IS_GLOB_USERSELECT_BLOCK = true
+const IS_CONTEXTMENU_BLOCK = true
+
 
 function getLinksFromPage() {
 	const links = document.querySelectorAll('a')
@@ -50,10 +52,18 @@ function blockUserSelectGlob() {
 	document.body.style.userSelect = "none"
 }
 
+function blockContextMenu() {
+	document.addEventListener('contextmenu', (e) => {
+		e.preventDefault()
+		e.stopPropagation()
+	}, true)
+}
+
 
 if (IS_WHITELIST_MODE) blockLink(getLinksFromPage(), WHITELIST)
 if (IS_CLEANER_MODE) clearPage(getElementsBySelector(GARBAGE_SELECTORS))
 if (IS_GLOB_USERSELECT_BLOCK) blockUserSelectGlob()
+if (IS_CONTEXTMENU_BLOCK) blockContextMenu()
 
 
 const observer = new MutationObserver(() => blockLink());
